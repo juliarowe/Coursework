@@ -1,0 +1,21 @@
+<span class="mods">
+  <i class="fa fa-comment mod-toggle"></i>
+  <span class="suggestions">
+    <ul>
+      <% modifications.each do |mod| %>
+        <li>
+        <div class="ratebox" data-id=<%= mod.id %> id=<%= mod.id %> data-rating=<%= mod.rating %>></div>
+          <%= mod.suggestion %>
+        </li>
+      <% end %>
+      <li>
+        <span class="new-mod-form">
+          <%= form_tag modifications_path do %>
+            <%= text_area_tag 'new_mod', nil, placeholder: "Submit a new modification.", class: "new-mod", id: orig_id %>
+            <%= submit_tag 'Submit', class: "submit-mod btn btn-primary"%>
+          <% end %>
+        </span>
+      </li>
+    </ul>
+  </span>
+</span>

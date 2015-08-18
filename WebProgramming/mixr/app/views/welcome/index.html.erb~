@@ -1,0 +1,133 @@
+<div class="welcome-body">
+  <div class="intro-header">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="intro-message">
+                      <h1 class="welcome">Welcome to Mixr</h1>
+                      <hr class="intro-divider">
+                      <h3 class="welcome">Use Mixr to find and submit twists to classic recipes.</h3>
+       
+                  </div>
+              </div>
+          </div>
+
+      </div>
+        <!-- /.container -->
+
+  </div>
+    <!-- /.intro-header -->
+    
+
+  <h1> Popular Recipes</h1>
+
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+    <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <%if @recipes[0].image? %>
+          <%=image_tag @recipes[0].image.url%>
+          <div class="carousel-caption">
+            <h3><%= link_to @recipes[0].title, @recipes[0] %></h3>
+            <ul>
+            <% @recipes[0].recipe_ingredients.each do |r_ingr| %>
+              <li>
+              <%= r_ingr.quantity %>
+              <%= r_ingr.ingredient.name if r_ingr and r_ingr.ingredient %>
+              </li>  
+            <% end %>
+            </ul>
+            <ol>
+            <% @recipes[0].steps.each do |step| %>
+              <li>
+              <%= step.instruction %>
+              </li>
+            <% end %>
+            </ol>
+          </div>
+        <% else %>
+          <%= image_tag("blank.jpg")%>
+          <div class="carousel-caption-no-image">
+            <h3><%= link_to @recipes[0].title, @recipes[0] %></h3>
+            <ul>
+            <% @recipes[0].recipe_ingredients.each do |r_ingr| %>
+              <li>
+              <%= r_ingr.quantity %>
+              <%= r_ingr.ingredient.name if r_ingr and r_ingr.ingredient %>
+              </li>  
+            <% end %>
+            </ul>
+            <ol>
+            <% @recipes[0].steps.each do |step| %>
+              <li>
+              <%= step.instruction %>
+              </li>
+            <% end %>
+            </ol>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="item">
+        <%if @recipes[1].image? %>
+          <%= image_tag @recipes[1].image.url %>
+          <div class="carousel-caption">
+            <h3><%= link_to @recipes[1].title, @recipes[1] %></h3>
+            <ul>
+            <% @recipes[1].recipe_ingredients.each do |r_ingr| %>
+              <li>
+              <%= r_ingr.quantity %>
+              <%= r_ingr.ingredient.name if r_ingr and r_ingr.ingredient %>
+              </li>  
+            <% end %>
+            </ul>
+            <ol>
+            <% @recipes[1].steps.each do |step| %>
+              <li>
+              <%= step.instruction %>
+              </li>
+            <% end %>
+            </ol>
+          </div>
+        <% else %>
+          <%= image_tag("blank.jpg") %>
+          <div class="carousel-caption-no-image">
+            <h3><%= link_to @recipes[1].title, @recipes[1] %></h3>
+            <ul>
+            <% @recipes[1].recipe_ingredients.each do |r_ingr| %>
+              <li>
+              <%= r_ingr.quantity %>
+              <%= r_ingr.ingredient.name if r_ingr and r_ingr.ingredient %>
+              </li>  
+            <% end %>
+            </ul>
+            <ol>
+            <% @recipes[1].steps.each do |step| %>
+              <li>
+              <%= step.instruction %>
+              </li>
+            <% end %>
+            </ol>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="fa fa-angle-double-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="fa fa-angle-double-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>

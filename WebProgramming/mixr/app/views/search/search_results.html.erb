@@ -1,0 +1,11 @@
+<% provide(:title, "Search results") %>
+<% if @recipes.empty? %>
+    <h3>Sorry, no results found</h3>
+<% else %>
+    <h3>Search Results:</h3>
+    <% @recipes.each do |recipe| %>
+        <h4><%= link_to recipe.title, recipe %></h4>
+        
+    <% end %>
+<% end %>
+

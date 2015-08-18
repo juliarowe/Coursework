@@ -1,0 +1,166 @@
+<% provide(:title, @recipe.title) %>
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <h4 class="sidebar-brand">
+                Modifications
+            </h4>
+
+            <% @recipe.recipe_ingredients.each do |r_ingr| %>
+                <div class="suggestions" id=<%= "orig-mods-" + r_ingr.id %>>
+                    <h5 class="mod-subtitle">
+                        <%= r_ingr.ingredient.name.upcase if r_ingr and r_ingr.ingredient %>
+                    </h5>
+                    <div class="well suggestion-well">
+                        <% r_ingr.modifications.each_with_index do |mod, index| %>
+                            <li class="single-suggestion">
+                                <div class="ratebox suggestion-rating" data-id=<%= mod.id %> id=<%= mod.id %> data-rating=<%= mod.rating %>></div>
+                                <p><%= mod.suggestion %></p>
+                                <% if index < r_ingr.modifications.length - 1 %>
+                                    <hr class="mod-separator"/>
+                                <% end %>
+                            </li>
+                        <% end %>
+                        <span class="new-mod-form">
+                            <%= form_tag modifications_path do %>
+                                <%= text_area_tag 'new_mod', nil, placeholder: "Submit a new modification.", class: "new-mod", id: r_ingr.id %>
+                                <%= submit_tag 'Submit', class: "submit-mod btn btn-default"%>
+                            <% end %>
+                        </span>
+                    </div>
+                </div>
+            <% end %>
+
+            <% @recipe.steps.each do |step| %>
+                <div class="suggestions" id=<%= "orig-mods-" + step.id %>>
+                    <h5 class="mod-subtitle">
+                        <% if step.instruction %>
+                            <% label =    step.instruction[0..25] %>
+                            <% label = label == step.instruction ? label : label + " ..." %>
+                            <%= label.upcase %>
+                        <% end %>
+                    </h5>
+                    <div class="well suggestion-well">
+                        <% step.modifications.each_with_index do |mod, index| %>
+                            <li class="single-suggestion">
+                                <div class="ratebox" data-id=<%= mod.id %> id=<%= mod.id %> data-rating=<%= mod.rating %>></div>
+                                <p><%= mod.suggestion %></p>
+                                <% if index < step.modifications.length - 1 %>
+                                    <hr class="mod-separator"/>
+                                <% end %>
+                            </li>
+                        <% end %>
+                    </div>
+                    <span class="new-mod-form">
+                        <%= form_tag modifications_path do %>
+                            <%= text_area_tag 'new_mod', nil, placeholder: "Submit a new modification.", class: "new-mod", id: step.id %>
+                            <%= submit_tag 'Submit', class: "submit-mod btn btn-default"%>
+                        <% end %>
+                    </span>
+                </div>
+            <% end %>
+        </ul>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+ 
+                    <h1><%= @recipe.title %></h1>
+                    <div class="ratebox recipe-rating"
+                             data-id=<%= @recipe.id %>
+                             id=<%= @recipe.id %>
+                             data-rating=<%= @recipe.rating %>
+                             >
+                    </div> 
+                    <%= image_tag @recipe.image.url, class: "recipe-img" if @recipe.image?%>
+                    <div class="recipe-contents">
+                        <h4 class="subtitle">Ingredients</h4>
+                        <ul class="recipe-ingredients">
+                            <% @recipe.recipe_ingredients.each do |r_ingr| %>
+                                <% next unless r_ingr and r_ingr.ingredient %>
+                                <li>
+                                    <i class="fa fa-comment mod-toggle" id=<%= "orig-id-" + r_ingr.id %>></i>
+                                    <span class="italic"><%= r_ingr.quantity %></span>
+                                    <span class="bold"><%= r_ingr.ingredient.name if r_ingr and r_ingr.ingredient %></span>
+                                </li>
+                            <% end %>
+                        </ul>
+                        <h4 class="subtitle">Directions</h4>
+                        <ol class="steps">
+                            <% @recipe.steps.each do |step| %>
+                                <li>
+                                    <i class="fa fa-comment mod-toggle" id=<%= "orig-id-" + step.id %>></i>
+                                    <%= step.instruction %>
+                                </li>
+                            <% end %>
+                        </ol>
+                    </div>
+                    <div id="share_button" class="share-btn-span" 
+                            recipe-id=<%= @recipe.id %> recipe-title='<%= @recipe.title %>' 
+                            image-url='<%= @recipe.image? ? URI.join(request.url, @recipe.image.url) : "nil" %>'>
+
+                        <div class="fb-share-button" data-href="https://fathomless-eyrie-3707.herokuapp.com/recipes/<%= @recipe.id %>" data-layout="button"></div>
+                    </div>
+
+                    <div>
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Show/Hide Modifications Bar</a>
+                    </div>
+                    <div>
+                        <a href="#stats-toggle" class="btn btn-default" id="stats-toggle">Show/Hide Recipe Stats</a>
+                    </div>
+
+                    <span id="chart">
+                        <div class= "chart">
+                            <%= line_chart [{data: @recipe_votes_count }], min: Time.now - 5.days, max: Time.now %>
+                        </div>
+                        <h4 class="chart-label"> Number of Votes Per Day</h4>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+    <div id ="right-sidebar" class="no-mobile">
+        <br><br>
+        <div class="well subscriber-box">
+            <div>
+                <p>Want to be notified when new modifications are added to this recipe? Enter your email here.</p>
+                <%= text_field_tag "add-subscriber", "", id: "add-subscriber" %>
+                <%= submit_tag "Submit", class: "submit-sub", id: "r" + @recipe.id %>
+            </div>
+        </div>
+
+        <% if @recently_viewed != nil and !@recently_viewed.empty? %> 
+            <h3>You recently viewed:</h3>
+            <% @recently_viewed.each do |viewed| %>
+                <h5 class="recent-links"><%= link_to viewed.title, viewed %></h5>
+            <% end %>
+        <% end %>
+    </div>
+
+</div>
+
+
+
+<!-- /#wrapper -->
+
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("#stats-toggle").click(function(e) {
+        e.preventDefault();
+        $("#chart").toggle("show");
+    });
+</script>
+

@@ -1,0 +1,10 @@
+<% if @recipes.empty? %>
+  <h3>Sorry, no results found</h3>
+<% else %>
+  <h3>Search Results:</h3>
+  <% @recipes.each do |recipe| %>
+    <h3 class:"link"><%= link_to @recipes[0].title, @recipes[0] %></h3>
+    
+  <% end %>
+<% end %>
+

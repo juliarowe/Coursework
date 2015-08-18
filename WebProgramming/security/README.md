@@ -1,4 +1,4 @@
-Comp 20 - Assignment 4
+Web Programming - Assignment 4
 Security Assessement
 Julia Rowe
 28 April 2015

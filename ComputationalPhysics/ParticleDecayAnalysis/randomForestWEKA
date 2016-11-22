@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Julia Rowe 
+# RandomForestWEKA
+#
+# This file is intended to run random forest method on given
+# file. Feel free to play around with the parameters.
+#
+# USAGE: ./decisionTreesWEKA [TRAINING FILE] [TEST FILE] [OUTPUT]
+
+export CLASSPATH=/opt/shared/weka/weka-3-6-10/weka.jar:$CLASSPATH
+export WEKADATA=/opt/shared/weka/weka-3-6-10/data
+
+java weka.classifiers.trees.RandomForest  -t $1 -i -d randomForest.model
+
+java weka.classifiers.trees.RandomForest  -l randomForest.model -T $2 > $3
+

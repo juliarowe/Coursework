@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Jared Moskowitz
+# decisionTreesWEKA
+#
+# This file is intended to run decision tree method on given
+# file. Feel free to play around with the parameters.
+#
+# USAGE: ./decisionTreesWEKA [TRAINING FILE] [TEST FILE] [OUTPUT FILE]
+
+export CLASSPATH=/opt/shared/weka/weka-3-6-10/weka.jar:$CLASSPATH
+export WEKADATA=/opt/shared/weka/weka-3-6-10/data
+
+java weka.classifiers.bayes.NaiveBayes -t $1 -T $2 -i -k 
+#-d naiveBayes.model 
+ 
+#java weka.classifiers.bayes.NaiveBayes -l svm.model -T $2 > $3

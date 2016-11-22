@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Jared Moskowitz
+# convertToARFF9
+#
+# Converts ALL data files of 9 features in a directory to .arff files
+# if the files being converted end in .txt
+
+
+export CLASSPATH=/opt/shared/weka/weka-3-6-10/weka.jar:$CLASSPATH
+export WEKADATA=/opt/shared/weka/weka-3-6-10/data
+
+for f in *.txt; do
+
+        FILE1=$f
+        sed 's/.$//' $FILE1 > remp.csv
+        sed "s/\s/,/g" remp.csv > higgs.csv
+        echo 'mll,mjj,met-phi_centrality,mt,DYjj,sumMlj,dphill,contOLV,ptTotal,class' | cat - higgs.csv > temp && mv temp higgs.csv
+
+        NEWFILE="${f%.txt}.arff"
+        java -cp /opt/shared/weka/weka-3-6-10/weka.jar weka.core.converters.CSVLoader higgs.csv > $NEWFILE
+        sed -i '12s/.*/@attribute label {-1, 1}/' $NEWFILE
+done
+
+rm higgs.csv
+rm remp.csv
